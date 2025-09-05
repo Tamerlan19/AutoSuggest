@@ -1,4 +1,10 @@
 
+let suggestions = [];
+fetch('js/suggestions.json')
+  .then(response => response.json())
+  .then(data => suggestions = data)
+  .catch(err => console.error('Не удалось загрузить подсказки', err));
+
 const searchWrapper = document.querySelector(".search-input");
 const inputBox = searchWrapper.querySelector("input");
 const suggBox = searchWrapper.querySelector(".autocom-box");
@@ -17,18 +23,13 @@ inputBox.onkeyup = (e)=>{
             linkTag.click();
         }
         emptyArray = suggestions.filter((data)=>{
-            
             return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
         });
-        emptyArray = emptyArray.map((data)=>{
-            
-            return data = `<li>${data}</li>`;
-        });
-        searchWrapper.classList.add("active"); 
+        searchWrapper.classList.add("active");
         showSuggestions(emptyArray);
         let allList = suggBox.querySelectorAll("li");
         for (let i = 0; i < allList.length; i++) {
-            
+
             allList[i].setAttribute("onclick", "select(this)");
         }
     }else{
@@ -37,14 +38,19 @@ inputBox.onkeyup = (e)=>{
 }
 
 function showSuggestions(list){
-    let listData;
+    suggBox.innerHTML = '';
+    const userValue = inputBox.value;
     if(!list.length){
-        userValue = inputBox.value;
-        listData = `<li>${userValue}</li>`;
+        const li = document.createElement('li');
+        li.textContent = userValue;
+        suggBox.appendChild(li);
     }else{
-      listData = list.join('');
+      list.forEach((data) => {
+        const li = document.createElement('li');
+        li.textContent = data;
+        suggBox.appendChild(li);
+      });
     }
-    suggBox.innerHTML = listData;
 }
 
 function select(element){

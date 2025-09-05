@@ -47,3 +47,14 @@ function showSuggestions(list){
     suggBox.innerHTML = listData;
 }
 
+function select(element){
+    let selectData = element.textContent;
+    inputBox.value = selectData;
+    icon.onclick = ()=>{
+        webLink = `https://www.google.com/search?q=${selectData}`;
+        linkTag.setAttribute("href", webLink);
+        linkTag.click();
+    }
+    searchWrapper.classList.remove("active");
+}
+
